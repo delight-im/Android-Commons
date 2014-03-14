@@ -1,5 +1,7 @@
 package im.delight.android.baselib;
 
+import java.math.BigInteger;
+
 /**
  * Copyright 2014 www.delight.im <info@delight.im>
  * 
@@ -20,5 +22,13 @@ public class Data {
 	
 	/** This class may not be instantiated */
 	private Data() { }
+
+	public static String binToHex(byte[] data) {
+		return String.format("%0" + (data.length*2) + 'x', new BigInteger(1, data));
+	}
+	
+	public static String colorToHex(int color) {
+		return String.format("#%06X", (0xFFFFFF & color));
+	}
 
 }
