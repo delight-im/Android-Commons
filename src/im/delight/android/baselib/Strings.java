@@ -83,5 +83,25 @@ public class Strings {
 		}
 		return out.toString();
 	}
+	
+	public static String[] splitToChunks(final String text, final int chunkLength) {
+		int chunksCount = 1 + (text.length() / chunkLength);
+		String[] chunks = new String[chunksCount];
+		int start;
+		int end;
+		
+		for (int c = 0; c < chunksCount; c++) {
+			start = c * chunkLength;
+			end = start + chunkLength;
+			if (end <= text.length()) {
+				chunks[c] = text.substring(start, end);
+			}
+			else {
+				chunks[c] = text.substring(start);
+			}
+		}
+		
+		return chunks;
+	}
 
 }
