@@ -220,5 +220,23 @@ public class Social {
 			return null;
 		}
 	}
+	
+	/**
+	 * Whether the given person (represented by phone number) is known on the current device (i.e. in the address book) or not
+	 * 
+	 * @param context the Context reference to get the ContentResolver from
+	 * @param phoneNumber the phone number to look up
+	 * @return whether the phone number is in the contacts list (true) or not (false)
+	 */
+	public static boolean isPersonKnown(Context context, String phoneNumber) {
+		try {
+			Uri phoneUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+			Cursor phoneEntries = context.getContentResolver().query(phoneUri, new String[] { android.provider.ContactsContract.PhoneLookup.DISPLAY_NAME }, null, null, null);
+			return phoneEntries.getCount() > 0;
+		}
+		catch (Exception e) {
+			return false;
+		}
+	}
 
 }
