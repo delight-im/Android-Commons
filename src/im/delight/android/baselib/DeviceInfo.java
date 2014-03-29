@@ -1,13 +1,5 @@
 package im.delight.android.baselib;
 
-import java.util.Locale;
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.graphics.Point;
-import android.telephony.TelephonyManager;
-import android.view.Display;
-import android.view.WindowManager;
-
 /**
  * Copyright 2014 www.delight.im <info@delight.im>
  * 
@@ -23,6 +15,14 @@ import android.view.WindowManager;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import java.util.Locale;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Point;
+import android.telephony.TelephonyManager;
+import android.view.Display;
+import android.view.WindowManager;
 
 public class DeviceInfo {
 	

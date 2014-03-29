@@ -1,7 +1,5 @@
 package im.delight.android.baselib;
 
-import java.math.BigInteger;
-
 /**
  * Copyright 2014 www.delight.im <info@delight.im>
  * 
@@ -17,6 +15,8 @@ import java.math.BigInteger;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import java.math.BigInteger;
 
 public class Data {
 	

@@ -1,9 +1,5 @@
 package im.delight.android.baselib;
 
-import android.content.Context;
-import android.content.ContextWrapper;
-import android.telephony.TelephonyManager;
-
 /**
  * Copyright 2014 www.delight.im <info@delight.im>
  * 
@@ -19,6 +15,10 @@ import android.telephony.TelephonyManager;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import android.content.Context;
+import android.content.ContextWrapper;
+import android.telephony.TelephonyManager;
 
 public class Phone {
 	

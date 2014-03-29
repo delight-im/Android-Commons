@@ -1,12 +1,5 @@
 package im.delight.android.baselib;
 
-import java.io.File;
-import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.ContactsContract;
-
 /**
  * Copyright 2014 www.delight.im <info@delight.im>
  * 
@@ -22,6 +15,13 @@ import android.provider.ContactsContract;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import java.io.File;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.ContactsContract;
 
 public class Social {
 	
