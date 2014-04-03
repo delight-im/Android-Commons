@@ -87,20 +87,24 @@ public class Social {
 	}
 
 	/**
-	 * Returns an Intent instance for opening a user's Facebook profile
+	 * Opens the given user's Facebook profile
 	 * 
 	 * @param context Context instance to get the PackageManager from
 	 * @param facebookID the user's Facebook ID
-	 * @return Intent for opening the Facebook profile
 	 */
-	public static Intent openFacebookProfile(Context context, String facebookID) {
+	public static void openFacebookProfile(Context context, String facebookID) {
+		Intent intent;
 		try {
 			context.getPackageManager().getPackageInfo("com.facebook.katana", 0); // throws exception if not installed
-			return new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/"+facebookID));
+			intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/"+facebookID));
 		}
 		catch (Exception e) {
-			return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/"+facebookID));
+			intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/"+facebookID));
 		}
+		try {
+			context.startActivity(intent);
+		}
+		catch (Exception e) { }
 	}
 	
 	/**
