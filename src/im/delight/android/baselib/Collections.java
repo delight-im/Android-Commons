@@ -53,5 +53,31 @@ public class Collections {
 		}
 		return -1;
 	}
+	
+	/**
+	 * Joins the given Iterable's elements and connects them with a delimiter string
+	 * @param iterable the Iterable instance whose items are to be joined
+	 * @param delimiter the String that will be used as a divider between the joined items
+	 * @return a String that contains all the joined items
+	 */
+	public static String implode(final Iterable<?> iterable, final String delimiter) {
+		StringBuilder out = new StringBuilder();
+		int counter = 0;
+		for (Object obj : iterable) {
+			if (obj != null) {
+				if (counter > 0) {
+					out.append(delimiter);
+				}
+				if (obj instanceof String) {
+					out.append(obj);
+				}
+				else {
+					out.append(obj.toString());
+				}
+				counter++;
+			}
+		}
+		return out.toString();
+	}
 
 }
