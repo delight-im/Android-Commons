@@ -34,6 +34,7 @@ import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.EditText;
+import android.widget.ListView;
 
 public class UI {
 	
@@ -83,6 +84,18 @@ public class UI {
 	
 	public static void putCursorToEnd(EditText editText) {
 		editText.setSelection(editText.getText().length());
+	}
+	
+	public static void scrollToBottom(final ListView listView) {
+		listView.post(new Runnable() {
+	        @Override
+	        public void run() {
+	        	int itemCount = listView.getAdapter().getCount();
+	        	if (itemCount > 0) {
+	        		listView.setSelection(itemCount - 1);
+	        	}
+	        }
+	    });
 	}
 
 	public static Bitmap getViewScreenshot(final View view) {
