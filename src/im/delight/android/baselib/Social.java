@@ -117,13 +117,36 @@ public class Social {
 	 * @throws Exception if there was an error trying to launch the email Intent
 	 */
 	public static void sendMail(final String recipient, final String subject, final String body, final int captionRes, final Context context) throws Exception {
+		sendMail(recipient, subject, body, captionRes, null, context);
+	}
+	
+	/**
+	 * Constructs an email Intent for the given message details and opens the application choooser for this Intent
+	 * 
+	 * @param recipient the recipient's email address
+	 * @param subject the subject of the message
+	 * @param captionRes the string resource ID for the application chooser's window title
+	 * @param restrictToPackage an optional package name that the Intent may be restricted to (or null)
+	 * @param context the Context instance to start the Intent from
+	 * @throws Exception if there was an error trying to launch the email Intent
+	 */
+	public static void sendMail(final String recipient, final String subject, final String body, final int captionRes, final String restrictToPackage, final Context context) throws Exception {
 		final String uriString = "mailto:"+Uri.encode(recipient)+"?subject="+Uri.encode(subject)+"&body="+Uri.encode(body);
 		final Uri uri = Uri.parse(uriString);
 		final Intent emailIntent = new Intent(android.content.Intent.ACTION_SENDTO);
 		emailIntent.setData(uri);
-		if (context != null) {
-			// offer a selection of all applications that can handle the email Intent
-			context.startActivity(Intent.createChooser(emailIntent, context.getString(captionRes)));
+		if (restrictToPackage != null && restrictToPackage.length() > 0) {
+			emailIntent.setPackage(restrictToPackage);
+			if (context != null) {
+				// launch the target app directly
+				context.startActivity(emailIntent);
+			}
+		}
+		else {
+			if (context != null) {
+				// offer a selection of all applications that can handle the email Intent
+				context.startActivity(Intent.createChooser(emailIntent, context.getString(captionRes)));
+			}
 		}
 	}
 	
