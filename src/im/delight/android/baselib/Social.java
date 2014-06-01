@@ -36,7 +36,7 @@ public class Social {
 	 * @param messageText the body text for the message to be shared
 	 */
 	public static void shareText(Context context, String windowTitle, String messageText) {
-		shareText(context, windowTitle, messageText);
+		shareText(context, windowTitle, messageText, "");
 	}
 
 	/**
