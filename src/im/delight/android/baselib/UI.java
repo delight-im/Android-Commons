@@ -33,6 +33,7 @@ import android.text.Spannable.Factory;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -240,5 +241,20 @@ public class UI {
 			editText.setSelection(oldCursorPosition);
 		}
 	}
+
+    public static void setDatePickerYearVisible(final DatePicker picker, final boolean yearVisible) {
+    	try {
+	    	Field f[] = picker.getClass().getDeclaredFields();
+	    	for (Field field : f) {
+		    	if (field.getName().equals("mYearPicker") || field.getName().equals("mYearSpinner")) {
+			    	field.setAccessible(true);
+			    	Object yearPicker = new Object();
+			    	yearPicker = field.get(picker);
+			    	((View) yearPicker).setVisibility(yearVisible ? View.VISIBLE : View.GONE);
+		    	}
+	    	}
+    	} 
+    	catch (Exception e) { }
+    }
 
 }
