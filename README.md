@@ -8,6 +8,19 @@ Base library containing lots of small features that are frequently needed in And
  * or
  * Create a new library project from this repository and reference it in your project
 
+## Documentation
+
+ * [`AutoListPreference`](docs/AutoListPreference.md)
+ * [`Collections`](docs/Collections.md)
+ * [`Data`](docs/Data.md)
+ * [`DeviceInfo`](docs/DeviceInfo.md)
+ * [`ListEditText`](docs/ListEditText.md)
+ * [`Phone`](docs/Phone.md)
+ * [`Social`](docs/Social.md)
+ * [`Strings`](docs/Strings.md)
+ * [`UI`](docs/UI.md)
+ * [`ViewScreenshot`](docs/ViewScreenshot.md)
+
 ## License
 
 ```

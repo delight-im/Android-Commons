@@ -29,7 +29,7 @@ import android.view.View;
  * <p>
  * Usage:
  * <p>
- * ViewScreenshot(activity).from(view).asFile(string).build();
+ * <code>ViewScreenshot(activity).from(view).asFile(string).build();</code>
  */
 public class ViewScreenshot {
 	
