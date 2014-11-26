@@ -2,13 +2,13 @@ package im.delight.android.baselib;
 
 /**
  * Copyright 2014 www.delight.im <info@delight.im>
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,7 @@ package im.delight.android.baselib;
  * limitations under the License.
  */
 
+import org.apache.http.protocol.HTTP;
 import java.io.File;
 import android.content.Context;
 import android.content.Intent;
@@ -24,13 +25,13 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 
 public class Social {
-	
+
 	/** This class may not be instantiated */
 	private Social() { }
 
 	/**
 	 * Constructs an Intent for sharing/sending plain text and starts Activity chooser for that Intent
-	 * 
+	 *
 	 * @param context Context reference to start the Activity chooser from
 	 * @param windowTitle the string to be used as the window title for the Activity chooser
 	 * @param messageText the body text for the message to be shared
@@ -41,7 +42,7 @@ public class Social {
 
 	/**
 	 * Constructs an Intent for sharing/sending plain text and starts Activity chooser for that Intent
-	 * 
+	 *
 	 * @param context Context reference to start the Activity chooser from
 	 * @param windowTitle the string to be used as the window title for the Activity chooser
 	 * @param messageText the body text for the message to be shared
@@ -49,15 +50,15 @@ public class Social {
 	 */
 	public static void shareText(Context context, String windowTitle, String messageText, String messageTitle) {
 		Intent intentInvite = new Intent(Intent.ACTION_SEND);
-		intentInvite.setType("text/plain");
+		intentInvite.setType(HTTP.PLAIN_TEXT_TYPE);
 		intentInvite.putExtra(Intent.EXTRA_SUBJECT, messageTitle);
 		intentInvite.putExtra(Intent.EXTRA_TEXT, messageText);
 		context.startActivity(Intent.createChooser(intentInvite, windowTitle));
 	}
-	
+
 	/**
 	 * Constructs an Intent for sharing/sending a file and starts Activity chooser for that Intent
-	 * 
+	 *
 	 * @param context Context reference to start the Activity chooser from
 	 * @param windowTitle the string to be used as the window title for the Activity chooser
 	 * @param file the File instance to be shared
@@ -66,10 +67,10 @@ public class Social {
 	public static void shareFile(Context context, String windowTitle, File file, final String mimeType) {
 		shareFile(context, windowTitle, file, mimeType, "");
 	}
-	
+
 	/**
 	 * Constructs an Intent for sharing/sending a file and starts Activity chooser for that Intent
-	 * 
+	 *
 	 * @param context Context reference to start the Activity chooser from
 	 * @param windowTitle the string to be used as the window title for the Activity chooser
 	 * @param file the File instance to be shared
@@ -88,7 +89,7 @@ public class Social {
 
 	/**
 	 * Opens the given user's Facebook profile
-	 * 
+	 *
 	 * @param context Context instance to get the PackageManager from
 	 * @param facebookID the user's Facebook ID
 	 */
@@ -106,10 +107,10 @@ public class Social {
 		}
 		catch (Exception e) { }
 	}
-	
+
 	/**
 	 * Constructs an email Intent for the given message details and opens the application choooser for this Intent
-	 * 
+	 *
 	 * @param recipient the recipient's email address
 	 * @param subject the subject of the message
 	 * @param captionRes the string resource ID for the application chooser's window title
@@ -119,10 +120,10 @@ public class Social {
 	public static void sendMail(final String recipient, final String subject, final String body, final int captionRes, final Context context) throws Exception {
 		sendMail(recipient, subject, body, captionRes, null, context);
 	}
-	
+
 	/**
 	 * Constructs an email Intent for the given message details and opens the application choooser for this Intent
-	 * 
+	 *
 	 * @param recipient the recipient's email address
 	 * @param subject the subject of the message
 	 * @param captionRes the string resource ID for the application chooser's window title
@@ -133,7 +134,7 @@ public class Social {
 	public static void sendMail(final String recipient, final String subject, final String body, final int captionRes, final String restrictToPackage, final Context context) throws Exception {
 		final String uriString = "mailto:"+Uri.encode(recipient)+"?subject="+Uri.encode(subject)+"&body="+Uri.encode(body);
 		final Uri uri = Uri.parse(uriString);
-		final Intent emailIntent = new Intent(android.content.Intent.ACTION_SENDTO);
+		final Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
 		emailIntent.setData(uri);
 		if (restrictToPackage != null && restrictToPackage.length() > 0) {
 			emailIntent.setPackage(restrictToPackage);
@@ -149,19 +150,25 @@ public class Social {
 			}
 		}
 	}
-	
+
 	/**
 	 * Constructs an SMS Intent for the given message details and opens the application chooser for this Intent
-	 * 
-	 * @param recipient the recipient's phone number
+	 *
+	 * @param recipient the recipient's phone number or `null`
 	 * @param body the body of the message
 	 * @param captionRes the string resource ID for the application chooser's window title
 	 * @param context the Context instance to start the Intent from
 	 * @throws Exception if there was an error trying to launch the SMS Intent
 	 */
 	public static void sendSMS(final String recipient, final String body, final int captionRes, final Context context) throws Exception {
-		final Intent intent = new Intent(android.content.Intent.ACTION_SENDTO);
-		intent.setData(Uri.parse("smsto:"+recipient));
+		final Intent intent = new Intent(Intent.ACTION_SENDTO);
+		intent.setType(HTTP.PLAIN_TEXT_TYPE);
+		if (recipient != null && recipient.length() > 0) {
+			intent.setData(Uri.parse("smsto:"+recipient));
+		}
+		else {
+			intent.setData(Uri.parse("sms:"));
+		}
 		intent.putExtra("sms_body", body);
 		intent.putExtra(Intent.EXTRA_TEXT, body);
 		if (context != null) {
@@ -169,10 +176,10 @@ public class Social {
 			context.startActivity(Intent.createChooser(intent, context.getString(captionRes)));
 		}
 	}
-	
+
 	/**
 	 * Returns a list of phone numbers for the contact with the given lookup ID
-	 * 
+	 *
 	 * @param lookupID the lookup ID to get the phone numbers for
 	 * @param context Context instance to get the ContentResolver from
 	 * @return CharSequence[] containing all phone numbers for the given contact
@@ -210,8 +217,8 @@ public class Social {
 	}
 
 	/**
-	 * Returns a list of email addresses for the contact with the given lookup ID 
-	 * 
+	 * Returns a list of email addresses for the contact with the given lookup ID
+	 *
 	 * @param lookupID the lookup ID to get the email addresses for
 	 * @param context Context instance to get the ContentResolver from
 	 * @return CharSequence[] containing all email addresses for the given contact
@@ -247,10 +254,10 @@ public class Social {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Whether the given person (represented by phone number) is known on the current device (i.e. in the address book) or not
-	 * 
+	 *
 	 * @param context the Context reference to get the ContentResolver from
 	 * @param phoneNumber the phone number to look up
 	 * @return whether the phone number is in the contacts list (true) or not (false)
