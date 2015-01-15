@@ -2,13 +2,13 @@ package im.delight.android.baselib;
 
 /**
  * Copyright 2014 www.delight.im <info@delight.im>
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,19 +38,19 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 public class UI {
-	
+
 	/** This class may not be instantiated */
 	private UI() { }
-		
+
 	public static int getTextColor(int backgroundColor) {
 		return getColorBrightness(backgroundColor) > 125 ? Color.BLACK : Color.WHITE;
 	}
-	
+
 	public static int getRandomColor() {
 		Random random = new Random();
 		return Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256));
 	}
-	
+
 	public static double getColorBrightness(int color) {
 		int r = Color.red(color);
 		int g = Color.green(color);
@@ -58,11 +58,11 @@ public class UI {
 
 		return Math.sqrt(0.299f * r * r + 0.587f * g * g + 0.114f * b * b);
 	}
-	
+
 	public static void setMaxLength(EditText editText, int maxLength) {
 		setMaxLength(editText, maxLength, null);
 	}
-	
+
 	public static void setMaxLength(EditText editText, int maxLength, InputFilter[] existingInputFilters) {
 		final InputFilter[] allInputFilters;
 		if (existingInputFilters == null) {
@@ -82,11 +82,11 @@ public class UI {
 		}
 		editText.setFilters(allInputFilters);
 	}
-	
+
 	public static void putCursorToEnd(EditText editText) {
 		editText.setSelection(editText.getText().length());
 	}
-	
+
 	public static void scrollToBottom(final ListView listView) {
 		listView.post(new Runnable() {
 	        @Override
@@ -103,18 +103,18 @@ public class UI {
 		// set up the drawing cache
 		view.setDrawingCacheEnabled(true);
 		view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-		
+
 		// get the screenshot
 		final Bitmap viewScreenshot = view.getDrawingCache(true);
 		final Bitmap output = viewScreenshot.copy(viewScreenshot.getConfig(), false);
-		
+
 		// disable the drawing cache again
 		view.destroyDrawingCache();
 		view.setDrawingCacheEnabled(false);
-		
+
 		return output;
 	}
-	
+
 	public static void forceOverflowMenu(Context context) {
 		try {
 			ViewConfiguration config = ViewConfiguration.get(context);
@@ -126,7 +126,7 @@ public class UI {
 		}
 		catch (Exception e) { }
 	}
-	
+
 	/**
 	 * Checks whether the given Dialog instance is still showing up and closes it if necessary
 	 * @param dialog Dialog instance to close
@@ -143,7 +143,7 @@ public class UI {
 			}
 		}
 	}
-	
+
 	/**
 	 * Restarts the given Activity
 	 * @param activity Activity instance to restart (e.g. MyActivity.this)
@@ -156,7 +156,7 @@ public class UI {
 		activity.startActivity(restart);
 		activity.overridePendingTransition(0, 0);
 	}
-	
+
 	/**
 	 * Either shows or hides the software keyboard
 	 * @param context Context reference to get the InputMethodManager from
@@ -172,6 +172,8 @@ public class UI {
 		}
 		try {
 			view.postDelayed(new Runnable() {
+
+				@Override
 				public void run() {
 					android.view.inputmethod.InputMethodManager keyboard = (android.view.inputmethod.InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 					if (keyboard != null) {
@@ -183,11 +185,12 @@ public class UI {
 						}
 					}
 				}
+
 			}, 150);
 		}
 		catch (Exception e) { }
 	}
-	
+
 	/**
 	 * Inserts the given text into the given EditText view at the current cursor position or replacing the current selection
 	 * @param editText the EditText view to insert the text into
@@ -200,7 +203,7 @@ public class UI {
 		final int endNormalized = Math.max(start, end); // selecting text backwards causes start and end to be in the "wrong" order for us
 		editText.getText().replace(startNormalized, endNormalized, textToInsert, 0, textToInsert.length()); // insert text at current cursor position or by replacing the current selection
 	}
-	
+
 	/**
 	 * Replaces the given text with the given image (as a spannable) in the given EditText
 	 * @param editText the EditText view to operate on
@@ -215,7 +218,7 @@ public class UI {
 		final int oldCursorPosition = editText.getSelectionStart();
 		final Factory spannableFactory = Spannable.Factory.getInstance();
 		final Spannable spannable = spannableFactory.newSpannable(editText.getText().toString());
-		
+
 		for (int i = 0; i < searchTexts.length; i++) {
 			final Pattern pattern = Pattern.compile(Pattern.quote(searchTexts[i]));
 			final Matcher matcher = pattern.matcher(spannable);
@@ -235,7 +238,7 @@ public class UI {
 				}
 			}
 		}
-		
+
 		editText.setText(spannable);
 		if (oldCursorPosition >= 0) {
 			editText.setSelection(oldCursorPosition);
@@ -253,7 +256,7 @@ public class UI {
 			    	((View) yearPicker).setVisibility(yearVisible ? View.VISIBLE : View.GONE);
 		    	}
 	    	}
-    	} 
+    	}
     	catch (Exception e) { }
     }
 

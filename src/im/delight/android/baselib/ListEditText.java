@@ -2,13 +2,13 @@ package im.delight.android.baselib;
 
 /**
  * Copyright 2014 www.delight.im <info@delight.im>
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,7 +38,7 @@ import android.widget.EditText;
  * When manipulating the text of this view, use setValue(...) and getValue() instead of setText(...) and getText()
  */
 public class ListEditText extends EditText {
-	
+
 	protected String[] mValuesHuman;
 	protected String[] mValuesMachine;
 	protected int mTitleRes;
@@ -62,11 +62,11 @@ public class ListEditText extends EditText {
 		super(context, attrs, defStyle);
 		initView();
 	}
-	
+
 	public void setCallback(OnChangeListener callback) {
 		mCallback = callback;
 	}
-	
+
 	protected void initView() {
 		mValue = "";
 		getBackground().setColorFilter(Color.rgb(205, 205, 205), PorterDuff.Mode.MULTIPLY); // change color of EditText without overwriting the native look
@@ -134,7 +134,7 @@ public class ListEditText extends EditText {
 			mShowInternalValues = showInternalValues;
 		}
 	}
-	
+
 	protected void openSelection() {
 		if (mValuesHuman == null || mValuesMachine == null || mTitleRes == 0 || mCancelRes == 0 || mContext == null) {
 			throw new RuntimeException("You must call setData(...) on this ListEditText before it can be used");
@@ -158,12 +158,20 @@ public class ListEditText extends EditText {
 		}
 	}
 
-	/** Returns the internal value of this view (not the displayed value which can be accessed with getText().toString()) */
+	/**
+	 * Returns the internal value of this view (not the displayed value which can be accessed with `getText().toString()`)
+	 *
+	 * @return the internal value of this input field
+	 */
 	public String getValue() {
 		return mValue;
 	}
-	
-	/** Sets the internal value of this view along with the displayed value (which is retrieved automatically) */
+
+	/**
+	 * Sets the internal value of this view along with the displayed value (which is retrieved automatically)
+	 *
+	 * @param value the internal value to set/select
+	 */
 	public void setValue(final String value) {
 		int displayTextIndex = Collections.arrayIndexOf(mValuesMachine, value);
 		if (displayTextIndex >= 0) {
@@ -180,7 +188,7 @@ public class ListEditText extends EditText {
 			setText("");
 		}
 	}
-	
+
 	public static interface OnChangeListener {
 		public void onValueChanged(String value);
 	}

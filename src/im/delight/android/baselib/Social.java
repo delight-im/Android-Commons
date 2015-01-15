@@ -113,6 +113,7 @@ public class Social {
 	 *
 	 * @param recipient the recipient's email address
 	 * @param subject the subject of the message
+	 * @param body the body text as a string
 	 * @param captionRes the string resource ID for the application chooser's window title
 	 * @param context the Context instance to start the Intent from
 	 * @throws Exception if there was an error trying to launch the email Intent
@@ -126,6 +127,7 @@ public class Social {
 	 *
 	 * @param recipient the recipient's email address
 	 * @param subject the subject of the message
+	 * @param body the body text as a string
 	 * @param captionRes the string resource ID for the application chooser's window title
 	 * @param restrictToPackage an optional package name that the Intent may be restricted to (or null)
 	 * @param context the Context instance to start the Intent from
