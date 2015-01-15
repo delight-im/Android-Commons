@@ -4,6 +4,8 @@ Base library containing lots of small features that are frequently needed in And
 
 ## Installation
 
+ * Include one of the [JARs](JARs) in your `libs` folder
+ * or
  * Copy the Java package to your project's source folder
  * or
  * Create a new library project from this repository and reference it in your project
