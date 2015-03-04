@@ -12,16 +12,16 @@ Base library containing lots of small features that are frequently needed in And
 
 ## Documentation
 
- * [`AutoListPreference`](docs/AutoListPreference.md)
- * [`Collections`](docs/Collections.md)
- * [`Data`](docs/Data.md)
- * [`DeviceInfo`](docs/DeviceInfo.md)
- * [`ListEditText`](docs/ListEditText.md)
- * [`Phone`](docs/Phone.md)
- * [`Social`](docs/Social.md)
- * [`Strings`](docs/Strings.md)
- * [`UI`](docs/UI.md)
- * [`ViewScreenshot`](docs/ViewScreenshot.md)
+ * [`AutoListPreference`](Documentation/AutoListPreference.md)
+ * [`Collections`](Documentation/Collections.md)
+ * [`Data`](Documentation/Data.md)
+ * [`DeviceInfo`](Documentation/DeviceInfo.md)
+ * [`ListEditText`](Documentation/ListEditText.md)
+ * [`Phone`](Documentation/Phone.md)
+ * [`Social`](Documentation/Social.md)
+ * [`Strings`](Documentation/Strings.md)
+ * [`UI`](Documentation/UI.md)
+ * [`ViewScreenshot`](Documentation/ViewScreenshot.md)
 
 ## License
 
