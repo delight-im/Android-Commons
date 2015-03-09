@@ -16,6 +16,7 @@ package im.delight.android.baselib;
  * limitations under the License.
  */
 
+import android.widget.TextView;
 import java.lang.reflect.Field;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -258,6 +259,14 @@ public class UI {
 	    	}
     	}
     	catch (Exception e) { }
+    }
+
+    public static void setReadOnly(final TextView view, final boolean readOnly) {
+    	view.setFocusable(!readOnly);
+    	view.setFocusableInTouchMode(!readOnly);
+    	view.setClickable(!readOnly);
+    	view.setLongClickable(!readOnly);
+    	view.setCursorVisible(!readOnly);
     }
 
 }
