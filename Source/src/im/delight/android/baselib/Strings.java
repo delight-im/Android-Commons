@@ -2,13 +2,13 @@ package im.delight.android.baselib;
 
 /**
  * Copyright 2014 www.delight.im <info@delight.im>
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,10 +17,12 @@ package im.delight.android.baselib;
  */
 
 public class Strings {
-	
+
+	private static final String ELLIPSIS = "\u2026";
+
 	/** This class may not be instantiated */
 	private Strings() { }
-		
+
 	/**
 	 * Checks whether the given search String is contained in the subject String without regarding the Strings' cases
 	 * @param subject String to search in
@@ -52,7 +54,7 @@ public class Strings {
 	public static String repeat(String str, int count) {
 		return new String(new char[count]).replace("\0", str);
 	}
-	
+
 	/**
 	 * Fills the given String with spaces at the left until it has the desired length
 	 * @param str the String to pad
@@ -62,9 +64,10 @@ public class Strings {
 	public static String padLeft(String str, int length) {
 		return String.format("%1$"+length+"s", str);
 	}
-	
+
 	public static String rot13(String input) {
-		StringBuilder out = new StringBuilder();
+		final StringBuilder out = new StringBuilder();
+
 		for (int i = 0; i < input.length(); i++) {
 			char c = input.charAt(i);
 			if (c >= 'a' && c <= 'm') {
@@ -81,15 +84,16 @@ public class Strings {
 			}
 			out.append(c);
 		}
+
 		return out.toString();
 	}
-	
+
 	public static String[] splitToChunks(final String text, final int chunkLength) {
 		int chunksCount = 1 + (text.length() / chunkLength);
 		String[] chunks = new String[chunksCount];
 		int start;
 		int end;
-		
+
 		for (int c = 0; c < chunksCount; c++) {
 			start = c * chunkLength;
 			end = start + chunkLength;
@@ -100,8 +104,20 @@ public class Strings {
 				chunks[c] = text.substring(start);
 			}
 		}
-		
+
 		return chunks;
+	}
+
+	public static String ensureMaxLength(final String input, final int maxLength) {
+		if (input == null) {
+			return null;
+		}
+
+		if (input.length() <= maxLength) {
+			return input;
+		}
+
+		return input.substring(0, maxLength - 1) + ELLIPSIS;
 	}
 
 }
