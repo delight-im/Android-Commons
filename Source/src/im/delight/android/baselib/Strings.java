@@ -24,7 +24,8 @@ public class Strings {
 	private Strings() { }
 
 	/**
-	 * Checks whether the given search String is contained in the subject String without regarding the Strings' cases
+	 * Checks whether the given search string is contained in the subject string without regarding the strings' cases
+	 *
 	 * @param subject String to search in
 	 * @param search String to search for
 	 * @return whether the String is contained (true) or not (false)
@@ -46,7 +47,8 @@ public class Strings {
 	}
 
 	/**
-	 * Repeats the given String
+	 * Repeats the given string
+	 *
 	 * @param str the String to repeat
 	 * @param count the desired number of repetitions
 	 * @return the new String with the desired number of repetitions
@@ -55,14 +57,52 @@ public class Strings {
 		return new String(new char[count]).replace("\0", str);
 	}
 
-	/**
-	 * Fills the given String with spaces at the left until it has the desired length
-	 * @param str the String to pad
-	 * @param length the desired length
-	 * @return the new padded String
-	 */
-	public static String padLeft(String str, int length) {
-		return String.format("%1$"+length+"s", str);
+	public static String padLeft(final String input, final int length) {
+		if (input == null) {
+			return null;
+		}
+
+		return String.format("%" + length + "s", input);
+	}
+
+	public static String padLeft(final int input, final int length) {
+		return padLeft(String.valueOf(input), length);
+	}
+
+	public static String padLeft(final String input, final int length, final char padChar) {
+		if (input == null) {
+			return null;
+		}
+
+		return padLeft(input, length).replace(' ', padChar);
+	}
+
+	public static String padLeft(final int input, final int length, final char padChar) {
+		return padLeft(String.valueOf(input), length, padChar);
+	}
+
+	public static String padRight(final String input, final int length) {
+		if (input == null) {
+			return null;
+		}
+
+		return String.format("%-" + length + "s", input);
+	}
+
+	public static String padRight(final int input, final int length) {
+		return padRight(String.valueOf(input), length);
+	}
+
+	public static String padRight(final String input, final int length, final char padChar) {
+		if (input == null) {
+			return null;
+		}
+
+		return padRight(input, length).replace(' ', padChar);
+	}
+
+	public static String padRight(final int input, final int length, final char padChar) {
+		return padRight(String.valueOf(input), length, padChar);
 	}
 
 	public static String rot13(String input) {
