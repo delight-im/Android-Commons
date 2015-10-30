@@ -17,7 +17,11 @@ package im.delight.android.baselib;
  */
 
 import org.apache.http.protocol.HTTP;
+import java.util.Locale;
 import java.io.File;
+import android.telephony.PhoneNumberUtils;
+import android.os.Build;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -177,6 +181,21 @@ public class Social {
 			// offer a selection of all applications that can handle the SMS Intent
 			context.startActivity(Intent.createChooser(intent, context.getString(captionRes)));
 		}
+	}
+
+	@SuppressLint("NewApi")
+	public static String normalizePhoneNumber(final Context context, final String phoneNumber) {
+		if (Build.VERSION.SDK_INT >= 21) {
+			final String countryIso2 = DeviceInfo.getCountryISO2(context);
+			if (countryIso2 != null) {
+				final String formatted = PhoneNumberUtils.formatNumberToE164(phoneNumber, countryIso2.toUpperCase(Locale.US));
+				if (formatted != null) {
+					return formatted;
+				}
+			}
+		}
+
+		return phoneNumber;
 	}
 
 	/**
