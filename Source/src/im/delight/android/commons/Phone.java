@@ -1,4 +1,4 @@
-package im.delight.android.baselib;
+package im.delight.android.commons;
 
 /*
  * Copyright (c) delight.im <info@delight.im>

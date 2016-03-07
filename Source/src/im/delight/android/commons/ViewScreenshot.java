@@ -1,4 +1,4 @@
-package im.delight.android.baselib;
+package im.delight.android.commons;
 
 /*
  * Copyright (c) delight.im <info@delight.im>
@@ -16,7 +16,7 @@ package im.delight.android.baselib;
  * limitations under the License.
  */
 
-import im.delight.android.baselib.UI;
+import im.delight.android.commons.UI;
 import java.io.File;
 import android.annotation.SuppressLint;
 import android.app.Activity;

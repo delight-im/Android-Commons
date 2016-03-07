@@ -1,4 +1,4 @@
-package im.delight.android.baselib;
+package im.delight.android.commons;
 
 /*
  * Copyright (c) delight.im <info@delight.im>
@@ -17,7 +17,6 @@ package im.delight.android.baselib;
  */
 
 import java.util.Set;
-
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;

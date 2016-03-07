@@ -1,6 +1,6 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="im.delight.android.baselib">
+    package="im.delight.android.commons">
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="16" />
