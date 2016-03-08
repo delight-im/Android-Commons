@@ -913,7 +913,7 @@ public final class UI {
      * @param editText the `EditText` instance to insert the text into
      * @param textToInsert the text to insert
      */
-    public static void insertTextAtCursorPosition(final EditText editText, final String textToInsert;
+    public static void insertTextAtCursorPosition(final EditText editText, final String textToInsert);
 
     /**
      * Replaces the given texts with the given image (as a `Spannable`) in the specified `EditText` instance
