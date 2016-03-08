@@ -24,18 +24,25 @@ import android.os.Build;
 import android.view.Display;
 import android.view.Surface;
 
-public class Screen {
+/** Utilities for working with screen sizes and orientations */
+public final class Screen {
 
-	public static class Orientation {
-
-		public static final int LANDSCAPE = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-		public static final int PORTRAIT = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-		public static final int REVERSE_LANDSCAPE = 8; // ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
-		public static final int REVERSE_PORTRAIT = 9; // ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
-		public static final int UNSPECIFIED = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
-
+	private static class Orientation {
+		private static final int LANDSCAPE = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+		private static final int PORTRAIT = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+		private static final int REVERSE_LANDSCAPE = 8; // ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+		private static final int REVERSE_PORTRAIT = 9; // ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+		private static final int UNSPECIFIED = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
 	}
 
+	/** This class may not be instantiated */
+	private Screen() { }
+
+	/**
+	 * Locks the screen's orientation to the current setting
+	 *
+	 * @param activity an `Activity` reference
+	 */
 	@SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
 	public static void lockOrientation(final Activity activity) {
@@ -89,6 +96,11 @@ public class Screen {
 		}
 	}
 
+	/**
+	 * Unlocks the screen's orientation in case it has been locked before
+	 *
+	 * @param activity an `Activity` reference
+	 */
 	public static void unlockOrientation(final Activity activity) {
 		activity.setRequestedOrientation(Orientation.UNSPECIFIED);
 	}

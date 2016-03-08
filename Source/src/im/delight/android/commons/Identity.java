@@ -26,7 +26,8 @@ import android.content.Context;
 import android.provider.Settings.Secure;
 import android.os.Build;
 
-public class Identity {
+/** Exposes identity information about the current user that can be retrieved by the application */
+public final class Identity {
 
 	private static final String INSTALLATION_ID_FILENAME = "INSTALLATION_ID";
 	private static final String FILE_MODE_READ_ONLY = "r";
@@ -37,11 +38,11 @@ public class Identity {
 	private Identity() { }
 
 	/**
-	 * Returns an identifier that is unique for this app installation
+	 * Returns an identifier that is unique for this application's installation
 	 *
-	 * The identifier is usually reset when the app is uninstalled or the app's data is cleared
+	 * The identifier is usually reset when the app is uninstalled or the application's data is cleared
 	 *
-	 * @param context a valid `Context` reference
+	 * @param context a context reference
 	 * @return the unique identifier
 	 */
 	public synchronized static String getInstallationId(final Context context) {
@@ -66,6 +67,7 @@ public class Identity {
 		final byte[] bytes = new byte[(int) f.length()];
 		f.readFully(bytes);
 		f.close();
+
 		return new String(bytes);
 	}
 
@@ -81,17 +83,18 @@ public class Identity {
 	 *
 	 * The identifier is usually reset when performing a factory reset on the device
 	 *
-	 * On devices with multi-user capabilities, each user has their own identifier, in most cases
+	 * On devices with multi-user capabilities, each user usually has their own identifier
 	 *
 	 * In general, you may not use this identifier for advertising purposes
 	 *
-	 * @param context a valid `Context` reference
+	 * @param context a context reference
 	 * @return the unique identifier
 	 */
 	@SuppressLint("NewApi")
 	public static String getDeviceId(final Context context) {
 		if (mDeviceId == null) {
 			final String androidId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+
 			if (androidId != null && !androidId.equals("") && !androidId.equalsIgnoreCase("9774d56d682e549c")) {
 				mDeviceId = androidId;
 			}

@@ -16,7 +16,8 @@ package im.delight.android.commons;
  * limitations under the License.
  */
 
-public class Strings {
+/** Utilities for working with strings and characters */
+public final class Strings {
 
 	private static final String ELLIPSIS = "\u2026";
 
@@ -24,39 +25,48 @@ public class Strings {
 	private Strings() { }
 
 	/**
-	 * Checks whether the given search string is contained in the subject string without regarding the strings' cases
+	 * Checks whether the given search string is contained in the subject string without regard to the strings' cases
 	 *
-	 * @param subject String to search in
-	 * @param search String to search for
-	 * @return whether the String is contained (true) or not (false)
+	 * @param subject the string to search in
+	 * @param search the string to search for
+	 * @return whether the string is contained in the subject or not
 	 */
-	public static boolean containsIgnoreCase(String subject, String search) {
+	public static boolean containsIgnoreCase(final String subject, final String search) {
 		if (search == null || subject == null) {
 			return false;
 		}
 		else {
-			int nChars = search.length();
-			int searchLimit = subject.length()-nChars;
+			final int nChars = search.length();
+			final int searchLimit = subject.length()-nChars;
+
 			for (int i = 0; i <= searchLimit; i++) {
 				if (subject.regionMatches(true, i, search, 0, nChars)) {
 					return true;
 				}
 			}
+
 			return false;
 		}
 	}
 
 	/**
-	 * Repeats the given string
+	 * Repeats the given string so that it reaches the desired count
 	 *
-	 * @param str the String to repeat
+	 * @param str the string to repeat
 	 * @param count the desired number of repetitions
-	 * @return the new String with the desired number of repetitions
+	 * @return the new string with the desired number of repetitions
 	 */
-	public static String repeat(String str, int count) {
+	public static String repeat(final String str, final int count) {
 		return new String(new char[count]).replace("\0", str);
 	}
 
+	/**
+	 * Pads the given string on the left side so that it reaches the desired length
+	 *
+	 * @param input the string to modify
+	 * @param length the desired length of the string
+	 * @return the padded string
+	 */
 	public static String padLeft(final String input, final int length) {
 		if (input == null) {
 			return null;
@@ -65,10 +75,14 @@ public class Strings {
 		return String.format("%" + length + "s", input);
 	}
 
-	public static String padLeft(final int input, final int length) {
-		return padLeft(String.valueOf(input), length);
-	}
-
+	/**
+	 * Pads the given string on the left side so that it reaches the desired length
+	 *
+	 * @param input the string to modify
+	 * @param length the desired length of the string
+	 * @param padChar the character used for padding
+	 * @return the padded string
+	 */
 	public static String padLeft(final String input, final int length, final char padChar) {
 		if (input == null) {
 			return null;
@@ -77,10 +91,13 @@ public class Strings {
 		return padLeft(input, length).replace(' ', padChar);
 	}
 
-	public static String padLeft(final int input, final int length, final char padChar) {
-		return padLeft(String.valueOf(input), length, padChar);
-	}
-
+	/**
+	 * Pads the given string on the right side so that it reaches the desired length
+	 *
+	 * @param input the string to modify
+	 * @param length the desired length of the string
+	 * @return the padded string
+	 */
 	public static String padRight(final String input, final int length) {
 		if (input == null) {
 			return null;
@@ -89,10 +106,14 @@ public class Strings {
 		return String.format("%-" + length + "s", input);
 	}
 
-	public static String padRight(final int input, final int length) {
-		return padRight(String.valueOf(input), length);
-	}
-
+	/**
+	 * Pads the given string on the right side so that it reaches the desired length
+	 *
+	 * @param input the string to modify
+	 * @param length the desired length of the string
+	 * @param padChar the character used for padding
+	 * @return the padded string
+	 */
 	public static String padRight(final String input, final int length, final char padChar) {
 		if (input == null) {
 			return null;
@@ -101,15 +122,19 @@ public class Strings {
 		return padRight(input, length).replace(' ', padChar);
 	}
 
-	public static String padRight(final int input, final int length, final char padChar) {
-		return padRight(String.valueOf(input), length, padChar);
-	}
-
-	public static String rot13(String input) {
+	/**
+	 * "Encrypts" the given string using the ROT-13 algorithm
+	 *
+	 * @param input the string to "encrypt"
+	 * @return the "encrypted" string
+	 */
+	public static String rot13(final String input) {
 		final StringBuilder out = new StringBuilder();
 
+		char c;
 		for (int i = 0; i < input.length(); i++) {
-			char c = input.charAt(i);
+			c = input.charAt(i);
+
 			if (c >= 'a' && c <= 'm') {
 				c += 13;
 			}
@@ -122,32 +147,48 @@ public class Strings {
 			else if (c >= 'N' && c <= 'Z') {
 				c -= 13;
 			}
+
 			out.append(c);
 		}
 
 		return out.toString();
 	}
 
-	public static String[] splitToChunks(final String text, final int chunkLength) {
-		int chunksCount = 1 + (text.length() / chunkLength);
-		String[] chunks = new String[chunksCount];
+	/**
+	 * Splits the given string into chunks of the specified length
+	 *
+	 * @param textToSplit the text to split into chunks
+	 * @param chunkLength the desired length of the chunks
+	 * @return the list of chunks extrated from the text
+	 */
+	public static String[] splitToChunks(final String textToSplit, final int chunkLength) {
+		final int chunksCount = 1 + (textToSplit.length() / chunkLength);
+		final String[] chunks = new String[chunksCount];
+
 		int start;
 		int end;
-
 		for (int c = 0; c < chunksCount; c++) {
 			start = c * chunkLength;
 			end = start + chunkLength;
-			if (end <= text.length()) {
-				chunks[c] = text.substring(start, end);
+
+			if (end <= textToSplit.length()) {
+				chunks[c] = textToSplit.substring(start, end);
 			}
 			else {
-				chunks[c] = text.substring(start);
+				chunks[c] = textToSplit.substring(start);
 			}
 		}
 
 		return chunks;
 	}
 
+	/**
+	 * Ensures that the given string has the maximum length as specified
+	 *
+	 * @param input the string to ensure the length for
+	 * @param maxLength the length to guarantee
+	 * @return the (shortened) string
+	 */
 	public static String ensureMaxLength(final String input, final int maxLength) {
 		if (input == null) {
 			return null;

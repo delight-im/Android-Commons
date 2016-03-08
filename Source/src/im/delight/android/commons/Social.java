@@ -28,84 +28,90 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
 
-public class Social {
+/** Utilities for working with social features, communication and content sharing */
+public final class Social {
 
 	/** This class may not be instantiated */
 	private Social() { }
 
 	/**
-	 * Constructs an Intent for sharing/sending plain text and starts Activity chooser for that Intent
+	 * Displays an application chooser and shares the specified plain text using the selected application
 	 *
-	 * @param context Context reference to start the Activity chooser from
-	 * @param windowTitle the string to be used as the window title for the Activity chooser
-	 * @param messageText the body text for the message to be shared
+	 * @param context a context reference
+	 * @param windowTitle the title for the application chooser's window
+	 * @param plainTextToShare the plain text to be shared
 	 */
-	public static void shareText(Context context, String windowTitle, String messageText) {
-		shareText(context, windowTitle, messageText, "");
+	public static void shareText(final Context context, final String windowTitle, final String plainTextToShare) {
+		shareText(context, windowTitle, plainTextToShare, "");
 	}
 
 	/**
-	 * Constructs an Intent for sharing/sending plain text and starts Activity chooser for that Intent
+	 * Displays an application chooser and shares the specified plain text and subject line using the selected application
 	 *
-	 * @param context Context reference to start the Activity chooser from
-	 * @param windowTitle the string to be used as the window title for the Activity chooser
-	 * @param messageText the body text for the message to be shared
-	 * @param messageTitle the title/subject for the message to be shared, if supported by the target app
+	 * @param context a context reference
+	 * @param windowTitle the title for the application chooser's window
+	 * @param bodyTextToShare the body text to be shared
+	 * @param subjectTextToShare the title or subject for the message to be shared, if supported by the target application
 	 */
-	public static void shareText(Context context, String windowTitle, String messageText, String messageTitle) {
-		Intent intentInvite = new Intent(Intent.ACTION_SEND);
+	public static void shareText(final Context context, final String windowTitle, final String bodyTextToShare, final String subjectTextToShare) {
+		final Intent intentInvite = new Intent(Intent.ACTION_SEND);
 		intentInvite.setType(HTTP.PLAIN_TEXT_TYPE);
-		intentInvite.putExtra(Intent.EXTRA_SUBJECT, messageTitle);
-		intentInvite.putExtra(Intent.EXTRA_TEXT, messageText);
+		intentInvite.putExtra(Intent.EXTRA_SUBJECT, subjectTextToShare);
+		intentInvite.putExtra(Intent.EXTRA_TEXT, bodyTextToShare);
+
 		context.startActivity(Intent.createChooser(intentInvite, windowTitle));
 	}
 
 	/**
-	 * Constructs an Intent for sharing/sending a file and starts Activity chooser for that Intent
+	 * Displays an application chooser and shares the specified file using the selected application
 	 *
-	 * @param context Context reference to start the Activity chooser from
-	 * @param windowTitle the string to be used as the window title for the Activity chooser
-	 * @param file the File instance to be shared
-	 * @param mimeType the MIME type for the file to be shared (e.g. image/jpeg)
+	 * @param context a context reference
+	 * @param windowTitle the title for the application chooser's window
+	 * @param fileToShare the file to be shared
+	 * @param mimeTypeForFile the MIME type for the file to be shared (e.g. `image/jpeg`)
 	 */
-	public static void shareFile(Context context, String windowTitle, File file, final String mimeType) {
-		shareFile(context, windowTitle, file, mimeType, "");
+	public static void shareFile(final Context context, final String windowTitle, final File fileToShare, final String mimeTypeForFile) {
+		shareFile(context, windowTitle, fileToShare, mimeTypeForFile, "");
 	}
 
 	/**
-	 * Constructs an Intent for sharing/sending a file and starts Activity chooser for that Intent
+	 * Displays an application chooser and shares the specified file using the selected application
 	 *
-	 * @param context Context reference to start the Activity chooser from
-	 * @param windowTitle the string to be used as the window title for the Activity chooser
-	 * @param file the File instance to be shared
-	 * @param mimeType the MIME type for the file to be shared (e.g. image/jpeg)
-	 * @param messageTitle the message title/subject that may be provided in addition to the file, if supported by the target app
+	 * @param context a context reference
+	 * @param windowTitle the title for the application chooser's window
+	 * @param fileToShare the file to be shared
+	 * @param mimeTypeForFile the MIME type for the file to be shared (e.g. `image/jpeg`)
+	 * @param subjectTextToShare the message title or subject for the file, if supported by the target application
 	 */
-	public static void shareFile(Context context, String windowTitle, File file, final String mimeType, String messageTitle) {
+	public static void shareFile(final Context context, final String windowTitle, final File fileToShare, final String mimeTypeForFile, final String subjectTextToShare) {
 		Intent intent = new Intent();
 		intent.setAction(Intent.ACTION_SEND);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.setType(mimeType);
-		intent.putExtra(Intent.EXTRA_SUBJECT, messageTitle);
-		intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+		intent.setType(mimeTypeForFile);
+		intent.putExtra(Intent.EXTRA_SUBJECT, subjectTextToShare);
+		intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(fileToShare));
 		context.startActivity(Intent.createChooser(intent, windowTitle));
 	}
 
 	/**
-	 * Opens the given user's Facebook profile
+	 * Opens the specified user's Facebook profile, either in the app or on the web
 	 *
-	 * @param context Context instance to get the PackageManager from
-	 * @param facebookID the user's Facebook ID
+	 * @param context a context reference
+	 * @param facebookId the user's Facebook ID or profile name
 	 */
-	public static void openFacebookProfile(Context context, String facebookID) {
+	public static void openFacebookProfile(final Context context, final String facebookId) {
 		Intent intent;
+
 		try {
-			context.getPackageManager().getPackageInfo("com.facebook.katana", 0); // throws exception if not installed
-			intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/"+facebookID));
+			// throws exception if not installed
+			context.getPackageManager().getPackageInfo("com.facebook.katana", 0);
+
+			intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/"+facebookId));
 		}
 		catch (Exception e) {
-			intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/"+facebookID));
+			intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/"+facebookId));
 		}
+
 		try {
 			context.startActivity(intent);
 		}
@@ -113,35 +119,36 @@ public class Social {
 	}
 
 	/**
-	 * Constructs an email Intent for the given message details and opens the application choooser for this Intent
+	 * Displays an application chooser and composes the described email using the selected application
 	 *
-	 * @param recipient the recipient's email address
-	 * @param subject the subject of the message
-	 * @param body the body text as a string
-	 * @param captionRes the string resource ID for the application chooser's window title
-	 * @param context the Context instance to start the Intent from
-	 * @throws Exception if there was an error trying to launch the email Intent
+	 * @param recipientEmail the recipient's email address
+	 * @param subjectText the subject line of the message
+	 * @param bodyText the body text of the message
+	 * @param captionRes a string resource ID for the title of the application chooser's window
+	 * @param context a context reference
+	 * @throws Exception if there was an error trying to launch the email application
 	 */
-	public static void sendMail(final String recipient, final String subject, final String body, final int captionRes, final Context context) throws Exception {
-		sendMail(recipient, subject, body, captionRes, null, context);
+	public static void sendMail(final String recipientEmail, final String subjectText, final String bodyText, final int captionRes, final Context context) throws Exception {
+		sendMail(recipientEmail, subjectText, bodyText, captionRes, null, context);
 	}
 
 	/**
-	 * Constructs an email Intent for the given message details and opens the application choooser for this Intent
+	 * Displays an application chooser and composes the described email using the selected application
 	 *
-	 * @param recipient the recipient's email address
-	 * @param subject the subject of the message
-	 * @param body the body text as a string
-	 * @param captionRes the string resource ID for the application chooser's window title
-	 * @param restrictToPackage an optional package name that the Intent may be restricted to (or null)
-	 * @param context the Context instance to start the Intent from
-	 * @throws Exception if there was an error trying to launch the email Intent
+	 * @param recipientEmail the recipient's email address
+	 * @param subjectText the subject line of the message
+	 * @param bodyText the body text of the message
+	 * @param captionRes a string resource ID for the title of the application chooser's window
+	 * @param restrictToPackage an application's package name to restricted the selection to
+	 * @param context a context reference
+	 * @throws Exception if there was an error trying to launch the email application
 	 */
-	public static void sendMail(final String recipient, final String subject, final String body, final int captionRes, final String restrictToPackage, final Context context) throws Exception {
-		final String uriString = "mailto:"+Uri.encode(recipient)+"?subject="+Uri.encode(subject)+"&body="+Uri.encode(body);
+	public static void sendMail(final String recipientEmail, final String subjectText, final String bodyText, final int captionRes, final String restrictToPackage, final Context context) throws Exception {
+		final String uriString = "mailto:"+Uri.encode(recipientEmail)+"?subject="+Uri.encode(subjectText)+"&body="+Uri.encode(bodyText);
 		final Uri uri = Uri.parse(uriString);
 		final Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
 		emailIntent.setData(uri);
+
 		if (restrictToPackage != null && restrictToPackage.length() > 0) {
 			emailIntent.setPackage(restrictToPackage);
 			if (context != null) {
@@ -158,37 +165,49 @@ public class Social {
 	}
 
 	/**
-	 * Constructs an SMS Intent for the given message details and opens the application chooser for this Intent
+	 * Displays an application chooser and composes the described text message (SMS) using the selected application
 	 *
-	 * @param recipient the recipient's phone number or `null`
-	 * @param body the body of the message
-	 * @param captionRes the string resource ID for the application chooser's window title
-	 * @param context the Context instance to start the Intent from
-	 * @throws Exception if there was an error trying to launch the SMS Intent
+	 * @param recipientPhone the recipient's phone number or `null`
+	 * @param bodyText the body text of the message
+	 * @param captionRes a string resource ID for the title of the application chooser's window
+	 * @param context a context reference
+	 * @throws Exception if there was an error trying to launch the SMS application
 	 */
-	public static void sendSMS(final String recipient, final String body, final int captionRes, final Context context) throws Exception {
+	public static void sendSms(final String recipientPhone, final String bodyText, final int captionRes, final Context context) throws Exception {
 		final Intent intent = new Intent(Intent.ACTION_SENDTO);
 		intent.setType(HTTP.PLAIN_TEXT_TYPE);
-		if (recipient != null && recipient.length() > 0) {
-			intent.setData(Uri.parse("smsto:"+recipient));
+
+		if (recipientPhone != null && recipientPhone.length() > 0) {
+			intent.setData(Uri.parse("smsto:"+recipientPhone));
 		}
 		else {
 			intent.setData(Uri.parse("sms:"));
 		}
-		intent.putExtra("sms_body", body);
-		intent.putExtra(Intent.EXTRA_TEXT, body);
+
+		intent.putExtra("sms_body", bodyText);
+		intent.putExtra(Intent.EXTRA_TEXT, bodyText);
+
 		if (context != null) {
 			// offer a selection of all applications that can handle the SMS Intent
 			context.startActivity(Intent.createChooser(intent, context.getString(captionRes)));
 		}
 	}
 
+	/**
+	 * Normalizes the specified phone number to its E.164 representation, if supported by the platform
+	 *
+	 * @param context a context reference
+	 * @param phoneNumber the phone number to normalize
+	 * @return the normalized phone number
+	 */
 	@SuppressLint("NewApi")
 	public static String normalizePhoneNumber(final Context context, final String phoneNumber) {
 		if (Build.VERSION.SDK_INT >= 21) {
 			final String countryIso2 = DeviceInfo.getCountryISO2(context);
+
 			if (countryIso2 != null) {
 				final String formatted = PhoneNumberUtils.formatNumberToE164(phoneNumber, countryIso2.toUpperCase(Locale.US));
+
 				if (formatted != null) {
 					return formatted;
 				}
@@ -201,34 +220,41 @@ public class Social {
 	/**
 	 * Returns a list of phone numbers for the contact with the given lookup ID
 	 *
-	 * @param lookupID the lookup ID to get the phone numbers for
-	 * @param context Context instance to get the ContentResolver from
-	 * @return CharSequence[] containing all phone numbers for the given contact
+	 * @param contactLookupId a contact's lookup ID to get the phone numbers for
+	 * @param context a context reference
+	 * @return CharSequence[] a list of all phone numbers for the given contact or `null`
 	 */
-	public static CharSequence[] getContactPhone(String lookupID, Context context) {
-		Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-		String[] projection = new String[] { ContactsContract.CommonDataKinds.Phone.NUMBER };
-		String where = ContactsContract.Contacts.LOOKUP_KEY +" = ?";
-		String[] selectionArgs = new String[] { lookupID };
-		String sortOrder = null;
+	public static CharSequence[] getContactPhone(final String contactLookupId, final Context context) {
+		final Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+		final String[] projection = new String[] { ContactsContract.CommonDataKinds.Phone.NUMBER };
+		final String where = ContactsContract.Contacts.LOOKUP_KEY +" = ?";
+		final String[] selectionArgs = new String[] { contactLookupId };
+		final String sortOrder = null;
+
 		Cursor result = context.getContentResolver().query(uri, projection, where, selectionArgs, sortOrder);
+
 		String phone;
 		if (result != null) {
 			if (result.getCount() > 0) {
-				CharSequence[] res = new CharSequence[result.getCount()];
+				final CharSequence[] res = new CharSequence[result.getCount()];
+
 				int i = 0;
 				while (result.moveToNext()) {
 					phone = result.getString(result.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
 					if (phone != null) {
 						res[i] = phone;
 						i++;
 					}
 				}
+
 				result.close();
+
 				return res;
 			}
 			else {
 				result.close();
+
 				return null;
 			}
 		}
@@ -240,34 +266,41 @@ public class Social {
 	/**
 	 * Returns a list of email addresses for the contact with the given lookup ID
 	 *
-	 * @param lookupID the lookup ID to get the email addresses for
-	 * @param context Context instance to get the ContentResolver from
-	 * @return CharSequence[] containing all email addresses for the given contact
+	 * @param contactLookupId a contact's lookup ID to get the email addresses for
+	 * @param context a context reference
+	 * @return CharSequence[] a list of all email addresses for the given contact or `null`
 	 */
-	public static CharSequence[] getContactEmail(String lookupID, Context context) {
-		Uri uri = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
-		String[] projection = new String[] { ContactsContract.CommonDataKinds.Email.DATA };
-		String where = ContactsContract.Contacts.LOOKUP_KEY +" = ?";
-		String[] selectionArgs = new String[] { lookupID };
-		String sortOrder = null;
+	public static CharSequence[] getContactEmail(final String contactLookupId, final Context context) {
+		final Uri uri = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
+		final String[] projection = new String[] { ContactsContract.CommonDataKinds.Email.DATA };
+		final String where = ContactsContract.Contacts.LOOKUP_KEY +" = ?";
+		final String[] selectionArgs = new String[] { contactLookupId };
+		final String sortOrder = null;
+
 		Cursor result = context.getContentResolver().query(uri, projection, where, selectionArgs, sortOrder);
+
 		String email;
 		if (result != null) {
 			if (result.getCount() > 0) {
-				CharSequence[] res = new CharSequence[result.getCount()];
+				final CharSequence[] res = new CharSequence[result.getCount()];
+
 				int i = 0;
 				while (result.moveToNext()) {
 					email = result.getString(result.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+
 					if (email != null) {
 						res[i] = email;
 						i++;
 					}
 				}
+
 				result.close();
+
 				return res;
 			}
 			else {
 				result.close();
+
 				return null;
 			}
 		}
@@ -277,16 +310,17 @@ public class Social {
 	}
 
 	/**
-	 * Whether the given person (represented by phone number) is known on the current device (i.e. in the address book) or not
+	 * Whether the specified person is known on the current device or not
 	 *
-	 * @param context the Context reference to get the ContentResolver from
+	 * @param context a context reference
 	 * @param phoneNumber the phone number to look up
-	 * @return whether the phone number is in the contacts list (true) or not (false)
+	 * @return whether the phone number is in the local address book or not
 	 */
-	public static boolean isPersonKnown(Context context, String phoneNumber) {
+	public static boolean isPersonKnown(final Context context, final String phoneNumber) {
 		try {
-			Uri phoneUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
-			Cursor phoneEntries = context.getContentResolver().query(phoneUri, new String[] { android.provider.ContactsContract.PhoneLookup.DISPLAY_NAME }, null, null, null);
+			final Uri phoneUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+			final Cursor phoneEntries = context.getContentResolver().query(phoneUri, new String[] { android.provider.ContactsContract.PhoneLookup.DISPLAY_NAME }, null, null, null);
+
 			return phoneEntries.getCount() > 0;
 		}
 		catch (Exception e) {

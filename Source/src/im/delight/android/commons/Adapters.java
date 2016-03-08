@@ -21,9 +21,23 @@ import android.os.Build;
 import android.widget.ArrayAdapter;
 import java.util.Collection;
 
-public class Adapters {
+/** Utilities for working with `android.widget.Adapter` and its subclasses */
+public final class Adapters {
 
-	public static <T> void setContent(final ArrayAdapter<T> adapter, final Collection<T> content) {
+	/** This class may not be instantiated */
+	private Adapters() { }
+
+	/**
+	 * Sets the items of the given adapter to the specified collection
+	 *
+	 * This operation includes removing the old items (if any) and adding the new ones
+	 *
+	 * Any listeners will only be informed about the final result
+	 *
+	 * @param adapter the adapter for which to set the items
+	 * @param content the collection that has the new items
+	 */
+	public static <T> void setItems(final ArrayAdapter<T> adapter, final Collection<T> content) {
     	adapter.setNotifyOnChange(false);
 
     	adapter.clear();
@@ -32,7 +46,13 @@ public class Adapters {
     	adapter.notifyDataSetChanged();
     }
 
-    @SuppressLint("NewApi")
+    /**
+     * Adds all the items from the specified collection to the given adapter at once
+     *
+     * @param adapter the adapter to insert the items into
+     * @param items the items to insert
+     */
+	@SuppressLint("NewApi")
 	public static <T> void addAll(final ArrayAdapter<T> adapter, final Collection<T> items) {
     	if (Build.VERSION.SDK_INT >= 11) {
         	adapter.addAll(items);

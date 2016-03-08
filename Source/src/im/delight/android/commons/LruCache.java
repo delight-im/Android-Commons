@@ -17,16 +17,16 @@ package im.delight.android.commons;
  */
 
 /**
- * LRU (least recently used) cache that can hold a fixed number of elements
- * <p>
- * If the cache is full and a new entry is added, the eldest entry is dropped
- * <p>
+ * LRU (least recently used) cache that can hold a fixed number of elements in memory
+ *
+ * If the cache is full and a new entry is added, the least recently used entry will be dropped
+ *
  * This implementation is thread-safe
  *
  * @param <K> the type of the keys
  * @param <V> the type of the values
  */
-public class LruCache<K, V> extends Cache<K, V> {
+public final class LruCache<K, V> extends Cache<K, V> {
 
 	/**
 	 * Creates a new instance with the given cache size

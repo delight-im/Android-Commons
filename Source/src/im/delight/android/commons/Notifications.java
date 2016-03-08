@@ -26,7 +26,7 @@ import android.os.Build;
 import android.content.Context;
 
 /** Show and manage notifications conveniently with full compatibility across platform levels */
-public class Notifications {
+public final class Notifications {
 
 	private static final int NOTIFICATION_ID_DEFAULT = 1;
 	private static final int LIGHTS_COLOR_DEFAULT = 0xffffffff;
@@ -37,6 +37,12 @@ public class Notifications {
 		mContext = context.getApplicationContext();
 	}
 
+	/**
+	 * Returns an instance of this class
+	 *
+	 * @param context a context reference
+	 * @return the instance
+	 */
 	public static Notifications getInstance(final Context context) {
 		if (mInstance == null) {
 			mInstance = new Notifications(context);
@@ -45,14 +51,44 @@ public class Notifications {
 		return mInstance;
 	}
 
+	/**
+	 * Shows a notification to the user
+	 *
+	 * @param targetActivityClass the target `android.app.Activity` class to launch
+	 * @param title the title of the notification
+	 * @param body the body text of the notification
+	 * @param smallIconRes a resource ID for the small notification icon
+	 * @return the notification ID
+	 */
 	public int show(final Class<?> targetActivityClass, final String title, final String body, final int smallIconRes) {
 		return show(targetActivityClass, title, body, smallIconRes, 0);
 	}
 
+	/**
+	 * Shows a notification to the user
+	 *
+	 * @param targetActivityClass the target `android.app.Activity` class to launch
+	 * @param title the title of the notification
+	 * @param body the body text of the notification
+	 * @param smallIconRes a resource ID for the small notification icon
+	 * @param largeIconRes a resource ID for the large notification icon
+	 * @return the notification ID
+	 */
 	public int show(final Class<?> targetActivityClass, final String title, final String body, final int smallIconRes, final int largeIconRes) {
 		return show(targetActivityClass, title, body, smallIconRes, largeIconRes, NOTIFICATION_ID_DEFAULT);
 	}
 
+	/**
+	 * Shows a notification to the user
+	 *
+	 * @param targetActivityClass the target `android.app.Activity` class to launch
+	 * @param title the title of the notification
+	 * @param body the body text of the notification
+	 * @param smallIconRes a resource ID for the small notification icon
+	 * @param largeIconRes a resource ID for the large notification icon
+	 * @param notificationId the pre-defined notification ID to use
+	 * @return the notification ID
+	 */
     @SuppressLint("NewApi")
 	@SuppressWarnings("deprecation")
 	public int show(final Class<?> targetActivityClass, final String title, final String body, final int smallIconRes, final int largeIconRes, final int notificationId) {
@@ -60,6 +96,7 @@ public class Notifications {
     	final PendingIntent resultPendingIntent = PendingIntent.getActivity(mContext, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     	final Notification notification;
+
     	if (Build.VERSION.SDK_INT >= 11) {
 	    	final Notification.Builder builder = new Notification.Builder(mContext);
 	    	builder.setContentIntent(resultPendingIntent);
@@ -97,8 +134,14 @@ public class Notifications {
     	return notificationId;
     }
 
+    /**
+     * Cancels (i.e. hides or dismisses) the notification with the specified ID
+     *
+     * @param notificationId the ID of the notification to cancel
+     */
     public void cancel(final int notificationId) {
     	final NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
     	try {
     		notificationManager.cancel(notificationId);
     	}

@@ -22,10 +22,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Cache that can hold a fixed number of elements
- * <p>
- * If the cache is full and a new entry is added, the eldest entry is dropped
- * <p>
+ * Cache that can hold a fixed number of elements in memory
+ *
+ * If the cache is full and a new entry is added, the oldest entry will be dropped
+ *
  * This implementation is thread-safe
  *
  * @param <K> the type of the keys
@@ -72,7 +72,7 @@ public class Cache<K, V> {
 	}
 
 	/**
-	 * Inserts a new element and possibly overwrite any previous value with the same key
+	 * Inserts a new element and possibly overwrites any previous value with the same key
 	 *
 	 * @param key the key to save the value for
 	 * @param value the value to save
@@ -113,16 +113,16 @@ public class Cache<K, V> {
 	/**
 	 * Returns all values that are currently in this cache
 	 *
-	 * @return the values
+	 * @return a collection containing the values
 	 */
 	public synchronized Collection<V> values() {
 		return mMap.values();
 	}
 
 	/**
-	 * Returns all ekys that are currently in this cache
+	 * Returns all keys that are currently in this cache
 	 *
-	 * @return the keys
+	 * @return a set containing the keys
 	 */
 	public synchronized Set<K> keys() {
 		return mMap.keySet();
@@ -138,15 +138,15 @@ public class Cache<K, V> {
 	}
 
 	/**
-	 * Override this method if you want to be informed whenever an entry is removed from this cache
-	 * <p>
-	 * You may use this if you must manually release resources whe an element is deleted
-	 * <p>
+	 * Override this method if you want to be informed whenever an entry is removed from the cache
+	 *
+	 * You may use this if you must manually release resources when an element is deleted
+	 *
 	 * The default implementation does nothing
 	 *
 	 * @param key the key that was removed
 	 * @param value the value that was removed
-	 * @param causedManually whether the removal was caused manually (through `put(...)` or `delete(...)`)
+	 * @param causedManually whether the removal was caused manually (through `put(...)` or `delete(...)`) or automatically
 	 */
 	@SuppressWarnings("unused")
 	public void onEntryRemoved(final K key, final V value, final boolean causedManually) { }
