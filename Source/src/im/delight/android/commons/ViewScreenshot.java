@@ -18,20 +18,28 @@ package im.delight.android.commons;
 
 import im.delight.android.commons.UI;
 import java.io.File;
-import android.annotation.SuppressLint;
+import java.io.FileOutputStream;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
 
 /**
- * Takes a screenshot from a given View and optionally saves it to a (public) file on the internal storage
- * <p>
+ * Takes a screenshot from any given `android.view.View` instance and stores it in a file on the external storage
+ *
+ * The external storage must be mounted and writable.
+ *
+ * Before Android 4.4, this requires the following permission in your `AndroidManifest.xml`:
+ *
+ * `<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />`
+ *
+ * Note that you may not use this class before `onWindowFocusChanged` has been called in your `Activity`
+ *
  * Usage:
- * <p>
- * <code>ViewScreenshot(activity).from(view).asFile(string).build();</code>
+ *
+ * `new ViewScreenshot(activity, new ViewScreenshot.Callback() {}).from(view).asFile(string).build()`
  */
-public class ViewScreenshot {
+public final class ViewScreenshot {
 
 	public static final int FORMAT_JPEG = 1;
 	public static final int FORMAT_PNG = 2;
@@ -43,19 +51,25 @@ public class ViewScreenshot {
 	private int mFormat;
 
 	public static interface Callback {
-
 		public void onSuccess(File file);
 		public void onError();
-
 	}
 
-	public ViewScreenshot(Activity activity, Callback callback) {
+	/**
+	 * Prepares a new screenshot helper for the given `Activity`
+	 *
+	 * @param activity the `Activity` instance
+	 * @param callback the callback to notify on success or error
+	 */
+	public ViewScreenshot(final Activity activity, final Callback callback) {
 		if (activity == null) {
 			throw new RuntimeException("activity must not be null");
 		}
+
 		if (callback == null) {
 			throw new RuntimeException("callback must not be null");
 		}
+
 		mActivity = activity;
 		mCallback = callback;
 		mView = null;
@@ -63,30 +77,57 @@ public class ViewScreenshot {
 		mFormat = FORMAT_PNG;
 	}
 
-	public ViewScreenshot from(View view) {
+	/**
+	 * Specifies the view to take the screenshot of
+	 *
+	 * @param view the `View` to take the screenshot of
+	 * @return this instance for chaining
+	 */
+	public ViewScreenshot from(final View view) {
 		if (view == null) {
 			throw new RuntimeException("view must not be null");
 		}
+
 		mView = view;
+
 		return this;
 	}
 
-	public ViewScreenshot asFile(String filename) {
-		if (filename == null || filename.length() == 0) {
+	/**
+	 * Specifies the filename to save the screenshot under
+	 *
+	 * @param filenameWithoutExtension the filename without any file extension
+	 * @return this instance for chaining
+	 */
+	public ViewScreenshot asFile(final String filenameWithoutExtension) {
+		if (filenameWithoutExtension == null || filenameWithoutExtension.length() == 0) {
 			throw new RuntimeException("filename must not be null or empty");
 		}
-		mFilename = filename;
+
+		mFilename = filenameWithoutExtension;
+
 		return this;
 	}
 
-	public ViewScreenshot inFormat(int format) {
+	/**
+	 * Specifies the format to save the screenshot in
+	 *
+	 * @param format the format, either `ViewScreenshot.FORMAT_JPEG` or `ViewScreenshot.FORMAT_PNG`
+	 * @return this instance for chaining
+	 */
+	public ViewScreenshot inFormat(final int format) {
 		if (format != FORMAT_JPEG && format != FORMAT_PNG) {
 			throw new RuntimeException("format must be either FORMAT_JPEG or FORMAT_PNG");
 		}
+
 		mFormat = format;
+
 		return this;
 	}
 
+	/**
+	 * Builds and saves the screenshot
+	 */
 	public void build() {
 		// get the screenshot
 		final Bitmap viewScreenshot = UI.getViewScreenshot(mView);
@@ -140,14 +181,18 @@ public class ViewScreenshot {
 		}.start();
 	}
 
-	@SuppressLint("WorldReadableFiles")
-	private static File saveBitmapToPublicStorage(Context context, String filenameWithoutExtension, Bitmap bitmap, int format) throws Exception {
+	private static File saveBitmapToPublicStorage(final Context context, final String filenameWithoutExtension, final Bitmap bitmap, final int format) throws Exception {
 		// get the output directory
-		final File outputDir = context.getFilesDir();
+		final File applicationDir = context.getExternalFilesDir(null);
+		final File libraryDir = new File(applicationDir, "im.delight.android.commons");
+		final File outputDir = new File(libraryDir, "screenshots");
+
+		// create the output directory if it doesn't exist
+		outputDir.mkdirs();
 
 		// create the .nomedia file which prevents images from showing up in gallery
 		try {
-			File noMedia = new File(outputDir, NO_MEDIA_FILENAME);
+			final File noMedia = new File(outputDir, NO_MEDIA_FILENAME);
 			noMedia.createNewFile();
 		}
 		// ignore if the file does already exist or cannot be created
@@ -168,12 +213,21 @@ public class ViewScreenshot {
 			throw new Exception("Unknown format: "+format);
 		}
 
-		// generate the full filename for the file to be written
-		final String outputFileName = filenameWithoutExtension+fileExtension;
-		// create a file object for the new file
-		final File outputFile = new File(outputDir, outputFileName);
+		// get a reference to the new file
+		final File outputFile = new File(outputDir, filenameWithoutExtension + fileExtension);
+		// if the output file already exists
+		if (outputFile.exists()) {
+			// delete it first
+			outputFile.delete();
+		}
+		// create an output stream for the new file
+		final FileOutputStream outputStream = new FileOutputStream(outputFile);
 		// write the data to the new file
-		bitmap.compress(bitmapFormat, 90, context.openFileOutput(outputFileName, Context.MODE_WORLD_READABLE));
+		bitmap.compress(bitmapFormat, 90, outputStream);
+		// flush the output stream
+		outputStream.flush();
+		// close the output stream
+		outputStream.close();
 
 		// return the file reference
 		return outputFile;
