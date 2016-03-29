@@ -2,6 +2,10 @@
 
 Reusable components and utilities for Android
 
+## Requirements
+
+ * Android 2.2+
+
 ## Installation
 
  * Add this library to your project
