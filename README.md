@@ -23,7 +23,7 @@ Reusable components and utilities for Android
 
      ```gradle
      dependencies {
-         compile 'com.github.delight-im:Android-Commons:v1.0.0'
+         compile 'com.github.delight-im:Android-Commons:v1.0.1'
      }
      ```
 
