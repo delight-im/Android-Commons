@@ -19,6 +19,7 @@ package im.delight.android.commons;
 import org.apache.http.protocol.HTTP;
 import java.util.Locale;
 import java.io.File;
+import android.content.ActivityNotFoundException;
 import android.telephony.PhoneNumberUtils;
 import android.os.Build;
 import android.annotation.SuppressLint;
@@ -100,22 +101,10 @@ public final class Social {
 	 * @param facebookId the user's Facebook ID or profile name
 	 */
 	public static void openFacebookProfile(final Context context, final String facebookId) {
-		Intent intent;
-
 		try {
-			// throws exception if not installed
-			context.getPackageManager().getPackageInfo("com.facebook.katana", 0);
-
-			intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/"+facebookId));
+			context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/" + facebookId)));
 		}
-		catch (Exception e) {
-			intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/"+facebookId));
-		}
-
-		try {
-			context.startActivity(intent);
-		}
-		catch (Exception e) { }
+		catch (ActivityNotFoundException ignored) {}
 	}
 
 	/**
